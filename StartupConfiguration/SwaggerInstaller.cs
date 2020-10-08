@@ -16,7 +16,7 @@ namespace EcomApp.StartupConfiguration
             services.AddSwaggerGen(x =>
             {
                 x.SwaggerDoc("v1", new OpenApiInfo { Title = "EcomApp API", Version = "v1" });
-                
+             
             });
         }
     }

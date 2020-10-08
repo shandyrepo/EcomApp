@@ -1,4 +1,6 @@
-﻿using EcomApp.Models;
+﻿
+using EcomApp.Models;
+using EcomApp.Data;
 using EcomApp.Services.Interfaces;
 using System;
 using System.Collections;
@@ -10,6 +12,12 @@ namespace EcomApp.Services
 {
     public class OrderService : IOrderService
     {
+        private readonly DataContext _dataContext;
+        public OrderService(DataContext dataContext)
+        {
+            _dataContext = dataContext;
+        }
+
         public Task<bool> CreateOrderAsync()
         {
             throw new NotImplementedException();

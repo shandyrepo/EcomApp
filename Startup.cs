@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using EcomApp.StartupConfiguration;
+using EcomApp.Services;
 using EcomApp.Services.Interfaces;
 
 namespace EcomApp
@@ -30,6 +31,7 @@ namespace EcomApp
             services.InstallServicesInAssembly(Configuration);
             services.AddControllers();
             services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<IOrderService, OrderService >();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

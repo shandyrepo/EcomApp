@@ -5,8 +5,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using EcomApp.Services.Interfaces;
 
-namespace EcomApp.Services.Interfaces
+namespace EcomApp.Services
 {
     public class ProductService : IProductService
     {
