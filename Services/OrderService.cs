@@ -9,6 +9,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Transactions;
 using Microsoft.EntityFrameworkCore.Storage;
+using Microsoft.EntityFrameworkCore;
 
 namespace EcomApp.Services
 {
@@ -41,17 +42,19 @@ namespace EcomApp.Services
             return false;
         }
 
-        public async Task<bool> CreateOrderAsync(Order order)
+        public async Task<bool> CreateOrderAsync(string email,Order order)
         {
             try
             {
-                _dataContext.Orders.Add(order);
+                var customer = _dataContext.Customers.FirstOrDefault(e => e.email == email);
+                customer.Orders.Add(order);
+                //_dataContext.Orders.Add(order);
                 var created = await _dataContext.SaveChangesAsync();
                 return created > 0;
             }
             catch(Exception ex)
             {
-                var s = ex.Message;
+                throw ex;
             }
             return false;
         }
@@ -61,14 +64,19 @@ namespace EcomApp.Services
             throw new NotImplementedException();
         }
 
-        public Task<List<Order>> GetOrdersByCustomer()
+        public  async Task<Customer> GetCustomerOrders(string email)
         {
-            throw new NotImplementedException();
+            return await _dataContext.Customers.
+                Include(p => p.Orders)
+                .ThenInclude(p => p.LineItems)
+                .ThenInclude(p => p.Product)
+                .FirstOrDefaultAsync(p => p.email == email);
+            
         }
 
-        public Task<List<Product>> GetPopularProductsByUniqueOrders()
+        public async Task<List<LineItem>> GetPopularProductsByUniqueOrders()
         {
-            throw new NotImplementedException();
+            return await _dataContext.LineItems.Include(e => e.Product).ToListAsync();
         }
     }
 }

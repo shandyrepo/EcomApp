@@ -11,10 +11,10 @@ namespace EcomApp.Services.Interfaces
     public interface IOrderService
     {
         IDbContextTransaction InitTransaction { get; }
-        Task<bool> CreateOrderAsync(Order order);
+        Task<bool> CreateOrderAsync(string email, Order order);
 
-        Task<List<Order>> GetOrdersByCustomer();
-        Task<List<Product>> GetPopularProductsByUniqueOrders();
+        Task<Customer> GetCustomerOrders(string email);
+        Task<List<LineItem>> GetPopularProductsByUniqueOrders();
         Task<bool> CreateCustomerAsync(Customer customer);
 
         Task<IEnumerable> GetCustomersAbovePriceAsync();
