@@ -12,12 +12,16 @@ namespace EcomApp.Services
     public class ProductService : IProductService
     {
         private readonly DataContext _dataContext;
-        public  ProductService(DataContext dataContext)
+        public ProductService(DataContext dataContext)
         {
             _dataContext = dataContext;
         }
         public async Task<bool> CreateProductAsync(Product product)
         {
+            var existingProduct = _dataContext.Products.FirstOrDefault(e => e.productName == product.productName);
+
+            if (existingProduct != null)
+                return false;
             await _dataContext.Products.AddAsync(product);
             var created = await _dataContext.SaveChangesAsync();
             return created > 0;
