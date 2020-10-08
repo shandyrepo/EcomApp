@@ -11,6 +11,7 @@ namespace EcomApp.Models
         [Key]
         public int id { get; private set; }
         public string productName { get; set; }
+        [Range(0.0, double.MaxValue, ErrorMessage = "Цена не может быть отрицательным")]
         public decimal price { get; set; }
     }
 }

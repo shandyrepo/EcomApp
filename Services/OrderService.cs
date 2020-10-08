@@ -56,24 +56,25 @@ namespace EcomApp.Services
             {
                 throw ex;
             }
-            return false;
         }
 
-        public Task<IEnumerable> GetCustomersAbovePriceAsync()
+        public async Task<List<Customer>> GetAllCustomersAsync()
         {
-            throw new NotImplementedException();
+            return await GetCustomers().ToListAsync();
         }
 
         public  async Task<Customer> GetCustomerOrders(string email)
         {
-            return await _dataContext.Customers.
-                Include(p => p.Orders)
-                .ThenInclude(p => p.LineItems)
-                .ThenInclude(p => p.Product)
-                .FirstOrDefaultAsync(p => p.email == email);
+            return await GetCustomers().FirstOrDefaultAsync(p => p.email == email);
             
         }
-
+        private IQueryable<Customer> GetCustomers()
+        {
+            return _dataContext.Customers.
+                Include(p => p.Orders)
+                .ThenInclude(p => p.LineItems)
+                .ThenInclude(p => p.Product);
+        }
         public async Task<List<LineItem>> GetPopularProductsByUniqueOrders()
         {
             return await _dataContext.LineItems.Include(e => e.Product).ToListAsync();

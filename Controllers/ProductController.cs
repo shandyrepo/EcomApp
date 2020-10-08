@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Mvc;
 using EcomApp.Contracts;
 using EcomApp.Contracts.Request;
 using EcomApp.Models;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+
 namespace EcomApp.Controllers
 {
     public class ProductController : ControllerBase
@@ -22,15 +24,17 @@ namespace EcomApp.Controllers
         [HttpPost("/Create")]
         public async Task<IActionResult> Create(ProductCreateRequest productRequest)
         {
-            Product product = new Product
-            {
-                price = productRequest.Price,
-                productName = productRequest.Name
-                
-            };
+          
+                Product product = new Product
+                {
+                    price = productRequest.Price,
+                    productName = productRequest.Name
 
-            await _productService.CreateProductAsync(product);
-            return Ok();
+                };
+            
+                await _productService.CreateProductAsync(product);
+                return Ok();
+
         }
         [HttpDelete("/Delete")]
         public async Task<IActionResult> Delete(int? id)

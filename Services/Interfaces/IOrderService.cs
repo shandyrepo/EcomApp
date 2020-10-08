@@ -17,6 +17,6 @@ namespace EcomApp.Services.Interfaces
         Task<List<LineItem>> GetPopularProductsByUniqueOrders();
         Task<bool> CreateCustomerAsync(Customer customer);
 
-        Task<IEnumerable> GetCustomersAbovePriceAsync();
+        Task<List<Customer>> GetAllCustomersAsync();
     }
 }
