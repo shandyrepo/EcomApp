@@ -7,13 +7,18 @@ using EcomApp.Models;
 
 namespace EcomApp.Data
 {
-    public class DataContext :DbContext
+    public class DataContext : DbContext
     {
+        public static bool iscreated = false;
         public DataContext(DbContextOptions<DataContext> options)
             : base(options)
         {
-            Database.EnsureDeleted();
-            Database.EnsureCreated();
+            if (!iscreated)
+            {
+                Database.EnsureDeleted();
+                Database.EnsureCreated();
+                iscreated = true;
+            }
         }
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Order> Orders { get; set; }

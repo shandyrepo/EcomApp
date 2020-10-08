@@ -18,31 +18,48 @@ namespace EcomApp.Controllers
         }
 
         [HttpPost("/CreateOrder")]
-        public async Task<IActionResult> CreateOrder(string customerName,string customerEmail,[FromBody] List<OrderCreateRequest> orderDetaild)
+        public async Task<IActionResult> CreateOrder(string customerName, string customerEmail, [FromBody] List<OrderCreateRequest> orderDetaild)
         {
             Customer customer = new Customer { name = customerName, email = customerEmail };
 
-            Order newOrder = new Order();
-            List<LineItem> items = new List<LineItem>();
+            await _orderSevice.CreateCustomerAsync(customer);
 
-            foreach (var orderDetail in orderDetaild)
+            using (var transaction = _orderSevice.InitTransaction)
             {
-                LineItem doubleItem = items.FirstOrDefault(items => items.ProductId == orderDetail.Id);
-                if (doubleItem == null)
+                try
                 {
-                    items.Add(new LineItem
+                    Order newOrder = new Order();
+                    foreach (var orderDetail in orderDetaild)
                     {
-                        ProductId = orderDetail.Id,
-                        quantity = orderDetail.Quantity
-                    });
+                        LineItem doubleItem = newOrder.LineItems.FirstOrDefault(e => e.ProductId == orderDetail.Id);
+                        if (doubleItem == null)
+                        {
+                            newOrder.LineItems.Add(new LineItem()
+                            {
+                                ProductId = orderDetail.Id,
+                                quantity = orderDetail.Quantity
+                            });
+                        }
+                        else
+                        {
+                            doubleItem.quantity += orderDetail.Quantity;
+                        }
+                    }
+                    var created = await _orderSevice.CreateOrderAsync(newOrder);
+
+                    if (created)
+                        transaction.Commit();
+
                 }
-                else
+                catch (Exception ex)
                 {
-                    doubleItem.quantity += orderDetail.Quantity;
+                    transaction.Rollback();
+                    return NotFound(ex.Message);
                 }
+
             }
-            newOrder.LineItems = items;
-            return  Ok();
+
+            return Ok();
         }
     }
 }
