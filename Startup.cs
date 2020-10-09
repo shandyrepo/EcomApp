@@ -1,18 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using EcomApp.Services;
+using EcomApp.Services.Interfaces;
+using EcomApp.StartupConfiguration;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using EcomApp.StartupConfiguration;
-using EcomApp.Services;
-using EcomApp.Services.Interfaces;
 
 namespace EcomApp
 {
@@ -30,7 +23,7 @@ namespace EcomApp
             services.InstallServicesInAssembly(Configuration);
             services.AddControllers();
             services.AddScoped<IProductService, ProductService>();
-            services.AddScoped<IOrderService, OrderService >();
+            services.AddScoped<IOrderService, OrderService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

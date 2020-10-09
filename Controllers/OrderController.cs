@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections;
-using System.Linq;
-using System.Threading.Tasks;
-using EcomApp.Services.Interfaces;
-using Microsoft.AspNetCore.Mvc;
+﻿using EcomApp.Contracts;
 using EcomApp.Contracts.Request;
 using EcomApp.Models;
-using EcomApp.Contracts;
+using EcomApp.Services.Interfaces;
+using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace EcomApp.Controllers
 {

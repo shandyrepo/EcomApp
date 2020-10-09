@@ -1,7 +1,5 @@
 ﻿using EcomApp.Models;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace EcomApp.Services.Interfaces
@@ -14,7 +12,7 @@ namespace EcomApp.Services.Interfaces
         Task<List<Product>> GetAllProductsAsync();
         Task<bool> DeleteProductAscync(int? id);
         Task<bool> UpdateProductAsync(Product product);
-        
+
 
 
     }

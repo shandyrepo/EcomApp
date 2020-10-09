@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using EcomApp.StartupConfiguration.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using EcomApp.StartupConfiguration.Interfaces;
+using System;
+using System.Linq;
 
 namespace EcomApp.StartupConfiguration
 {

@@ -1,15 +1,13 @@
 ﻿
-using EcomApp.Models;
 using EcomApp.Data;
+using EcomApp.Models;
 using EcomApp.Services.Interfaces;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Transactions;
-using Microsoft.EntityFrameworkCore.Storage;
-using Microsoft.EntityFrameworkCore;
 
 namespace EcomApp.Services
 {
@@ -42,7 +40,7 @@ namespace EcomApp.Services
             return false;
         }
 
-        public async Task<bool> CreateOrderAsync(string email,Order order)
+        public async Task<bool> CreateOrderAsync(string email, Order order)
         {
             try
             {
@@ -52,7 +50,7 @@ namespace EcomApp.Services
                 var created = await _dataContext.SaveChangesAsync();
                 return created > 0;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw ex;
             }
@@ -63,10 +61,10 @@ namespace EcomApp.Services
             return await GetCustomers().ToListAsync();
         }
 
-        public  async Task<Customer> GetCustomerOrders(string email)
+        public async Task<Customer> GetCustomerOrders(string email)
         {
             return await GetCustomers().FirstOrDefaultAsync(p => p.Email == email);
-            
+
         }
         private IQueryable<Customer> GetCustomers()
         {

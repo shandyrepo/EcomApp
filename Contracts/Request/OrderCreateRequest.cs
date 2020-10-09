@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 
 namespace EcomApp.Contracts.Request
@@ -15,7 +11,7 @@ namespace EcomApp.Contracts.Request
         public int Quantity { get; set; }
     }
 
- 
-    
-   
+
+
+
 }

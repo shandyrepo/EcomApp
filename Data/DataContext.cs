@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using EcomApp.Models;
 using Microsoft.EntityFrameworkCore;
-using EcomApp.Models;
 
 namespace EcomApp.Data
 {

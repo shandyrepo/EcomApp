@@ -1,12 +1,10 @@
 ﻿using EcomApp.Data;
 using EcomApp.Models;
+using EcomApp.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using EcomApp.Services.Interfaces;
-using System.Security.Cryptography.X509Certificates;
 
 namespace EcomApp.Services
 {

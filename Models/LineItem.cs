@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
 
 namespace EcomApp.Models
@@ -11,9 +8,9 @@ namespace EcomApp.Models
         [Key]
         public int Id { get; private set; }
 
-        [Range(0,int.MaxValue, ErrorMessage = "Количество не может быть отрицательным")]
+        [Range(0, int.MaxValue, ErrorMessage = "Количество не может быть отрицательным")]
         public int Quantity { get; set; }
-        public int ProductId  { get; set; }
+        public int ProductId { get; set; }
         public Product Product { get; set; }
     }
 }

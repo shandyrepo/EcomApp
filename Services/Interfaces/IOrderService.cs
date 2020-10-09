@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using EcomApp.Models;
-using EcomApp.Contracts.Request;
+﻿using EcomApp.Models;
 using Microsoft.EntityFrameworkCore.Storage;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 namespace EcomApp.Services.Interfaces
 {
     public interface IOrderService
