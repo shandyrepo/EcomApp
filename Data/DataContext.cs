@@ -6,16 +6,9 @@ namespace EcomApp.Data
     public class DataContext : DbContext
     {
         public static bool iscreated = false;
-        public DataContext(DbContextOptions<DataContext> options)
-            : base(options)
+        public DataContext(DbContextOptions<DataContext> options) : base(options)
         {
-            if (!iscreated)
-            {
-
-               // Database.EnsureDeleted();
-                Database.EnsureCreated();
-                iscreated = true;
-            }
+            Database.EnsureCreated();
         }
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Order> Orders { get; set; }
