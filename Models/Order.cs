@@ -9,8 +9,8 @@ namespace EcomApp.Models
     public class Order
     {
         [Key]
-        public int id { get; private set; }
-        public DateTime creationDate { get; set; }
+        public int Id { get; private set; }
+        public DateTime CreationDate { get; set; }
         public ICollection<LineItem> LineItems { get; set; }
         public Order()
         {

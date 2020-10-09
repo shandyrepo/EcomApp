@@ -41,13 +41,9 @@ namespace EcomApp
             }
 
             app.UseHttpsRedirection();
-
             app.UseRouting();
-
             app.UseAuthorization();
-
             app.UseStaticFiles();
-
             app.UseSwagger();
 
             app.UseSwaggerUI(c =>

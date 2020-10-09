@@ -8,9 +8,9 @@ namespace EcomApp.Models
     public class Customer
     {
         [Key]
-        public int id { get; private set; }
-        public string name { get; set; }
-        public string  email { get; set; }
+        public int Id { get; private set; }
+        public string Name { get; set; }
+        public string  Email { get; set; }
         public ICollection<Order> Orders { get; set; }
         public Customer()
         {

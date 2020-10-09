@@ -18,7 +18,6 @@ namespace EcomApp.StartupConfiguration
             services.AddDbContext<DataContext>(options =>
                 options.UseSqlServer(
                     configuration.GetConnectionString("DefaultConnection")));
-
         }
     }
 }

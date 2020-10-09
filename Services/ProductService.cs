@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using EcomApp.Services.Interfaces;
+using System.Security.Cryptography.X509Certificates;
 
 namespace EcomApp.Services
 {
@@ -18,7 +19,7 @@ namespace EcomApp.Services
         }
         public async Task<bool> CreateProductAsync(Product product)
         {
-            var existingProduct = _dataContext.Products.FirstOrDefault(e => e.productName == product.productName);
+            var existingProduct = _dataContext.Products.FirstOrDefault(e => e.ProductName == product.ProductName);
 
             if (existingProduct != null)
                 return false;
@@ -38,7 +39,6 @@ namespace EcomApp.Services
 
             var deleted = await _dataContext.SaveChangesAsync();
             return deleted > 0;
-
         }
 
         public async Task<List<Product>> GetAllProductsAsync()
@@ -48,12 +48,18 @@ namespace EcomApp.Services
 
         public async Task<Product> GetProductByIdAsync(int? id)
         {
-            return await _dataContext.Products.SingleAsync(x => x.id == id);
+            return await _dataContext.Products.SingleAsync(x => x.Id == id);
         }
 
-        public Task<bool> UpdateProductAsync(int? id)
+        public async Task<bool> UpdateProductAsync(Product product)
         {
-            throw new NotImplementedException();
+            var existingProduct = _dataContext.Products.FirstOrDefault(p => p.ProductName == product.ProductName);
+            if (existingProduct != null && existingProduct.Id != product.Id)
+                return false;
+
+            _dataContext.Products.Update(product);
+            var updated = await _dataContext.SaveChangesAsync();
+            return updated > 0;
         }
     }
 }

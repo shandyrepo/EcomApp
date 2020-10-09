@@ -2,17 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.ComponentModel.DataAnnotations;
 
-namespace EcomApp.Models
+namespace EcomApp.Contracts.Request
 {
-    public class Product
+    public class ProductUpdateRequest
     {
-        [Key]
-        public int Id { get; private set; }
-        public string ProductName { get; set; }
+        public int ID { get; set; }
+        public string Name { get; set; }
 
         [Range(0.0, double.MaxValue, ErrorMessage = "Цена не может быть отрицательным")]
         public decimal Price { get; set; }
+
     }
 }

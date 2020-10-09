@@ -12,11 +12,9 @@ namespace EcomApp.Services.Interfaces
     {
         IDbContextTransaction InitTransaction { get; }
         Task<bool> CreateOrderAsync(string email, Order order);
-
         Task<Customer> GetCustomerOrders(string email);
         Task<List<LineItem>> GetPopularProductsByUniqueOrders();
         Task<bool> CreateCustomerAsync(Customer customer);
-
         Task<List<Customer>> GetAllCustomersAsync();
     }
 }

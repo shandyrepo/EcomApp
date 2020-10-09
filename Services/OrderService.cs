@@ -30,11 +30,11 @@ namespace EcomApp.Services
         }
         public async Task<bool> CreateCustomerAsync(Customer customer)
         {
-            var existingCustomer = _dataContext.Customers.FirstOrDefault(e => e.email == customer.email);
+            var existingCustomer = _dataContext.Customers.FirstOrDefault(e => e.Email == customer.Email);
 
             if (existingCustomer == null)
             {
-                existingCustomer = new Customer { name = customer.name, email = customer.email };
+                existingCustomer = new Customer { Name = customer.Name, Email = customer.Email };
                 _dataContext.Customers.Add(existingCustomer);
                 var save = await _dataContext.SaveChangesAsync();
                 return save > 0;
@@ -46,7 +46,7 @@ namespace EcomApp.Services
         {
             try
             {
-                var customer = _dataContext.Customers.FirstOrDefault(e => e.email == email);
+                var customer = _dataContext.Customers.FirstOrDefault(e => e.Email == email);
                 customer.Orders.Add(order);
                 //_dataContext.Orders.Add(order);
                 var created = await _dataContext.SaveChangesAsync();
@@ -65,7 +65,7 @@ namespace EcomApp.Services
 
         public  async Task<Customer> GetCustomerOrders(string email)
         {
-            return await GetCustomers().FirstOrDefaultAsync(p => p.email == email);
+            return await GetCustomers().FirstOrDefaultAsync(p => p.Email == email);
             
         }
         private IQueryable<Customer> GetCustomers()

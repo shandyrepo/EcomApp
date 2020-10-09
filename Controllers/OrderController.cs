@@ -7,6 +7,7 @@ using EcomApp.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using EcomApp.Contracts.Request;
 using EcomApp.Models;
+using EcomApp.Contracts;
 
 namespace EcomApp.Controllers
 {
@@ -19,10 +20,10 @@ namespace EcomApp.Controllers
             _orderSevice = orderService;
         }
 
-        [HttpPost("/CreateOrder")]
+        [HttpPost(ApiRoutes.Orders.Create)]
         public async Task<IActionResult> CreateOrder(string customerName, string customerEmail, [FromBody] List<OrderCreateRequest> orderDetaild)
         {
-            Customer customer = new Customer { name = customerName, email = customerEmail };
+            Customer customer = new Customer { Name = customerName, Email = customerEmail };
 
             await _orderSevice.CreateCustomerAsync(customer);
 
@@ -39,82 +40,75 @@ namespace EcomApp.Controllers
                             newOrder.LineItems.Add(new LineItem()
                             {
                                 ProductId = orderDetail.Id,
-                                quantity = orderDetail.Quantity
+                                Quantity = orderDetail.Quantity
                             });
                         }
                         else
                         {
-                            doubleItem.quantity += orderDetail.Quantity;
+                            doubleItem.Quantity += orderDetail.Quantity;
                         }
                     }
                     var created = await _orderSevice.CreateOrderAsync(customerEmail, newOrder);
 
                     if (created)
                         transaction.Commit();
-
                 }
                 catch (Exception ex)
                 {
                     transaction.Rollback();
                     return NotFound(ex.InnerException.Message);
                 }
-
             }
-
             return Ok();
         }
 
-
-        [HttpGet("/GetCustomerOrders")]
+        [HttpGet(ApiRoutes.Orders.GetCustomerOrders)]
         public async Task<ActionResult<IEnumerable>> GetCustomerOrdersByEmail(string email)
         {
-
             var customer = _orderSevice.GetCustomerOrders(email).Result;
-            if (customer != null && customer.Orders?.Count > 0) {
-                var res = customer.Orders.GroupBy(e => (e.LineItems, e.id),
+            if (customer != null && customer.Orders?.Count > 0)
+            {
+                var res = customer.Orders.GroupBy(e => (e.LineItems, e.Id),
                     (key, value) => new
                     {
-                        OrderID = key.id,
-                        TotalOrderPrice = value.Sum(e => e.LineItems.Sum(p => p.Product.price * p.quantity))
+                        OrderID = key.Id,
+                        TotalOrderPrice = value.Sum(e => e.LineItems.Sum(p => p.Product.Price * p.Quantity))
 
                     }).OrderByDescending(e => e.TotalOrderPrice);
 
                 return Ok(res);
             }
-
             return NotFound("Заказы отсутствуют");
-
         }
 
-        [HttpGet("/GetPopularProducts")]
+        [HttpGet(ApiRoutes.Orders.GetPopularProducts)]
         public async Task<ActionResult<Product>> GetPopularProducts()
         {
             var itemsBySoldPositions = await _orderSevice.GetPopularProductsByUniqueOrders();
 
-            var result = itemsBySoldPositions.GroupBy(product => (product.ProductId, product.Product.productName),
+            var result = itemsBySoldPositions.GroupBy(product => (product.ProductId, product.Product.ProductName),
             (key, value) => new
             {
-                ProductName = key.productName,
-                TotalSold = value.Sum(item => item.quantity)
+                ProductName = key.ProductName,
+                TotalSold = value.Sum(item => item.Quantity)
             }).OrderByDescending(e => e.TotalSold);
 
             if (result.ToList().Count > 0)
                 return Ok(result);
-            else 
+            else
                 return NotFound("Отсутсвуют продукты");
         }
 
-
-        [HttpGet("/GetCustomersWithTotalOrdersPriceAboveValue")]
+        [HttpGet(ApiRoutes.Orders.GetCustomersOverTotalPrice)]
         public async Task<ActionResult<IEnumerable>> GetCustomersWithTotalOrderPricesAboveValue(decimal totalOrdersPrice)
         {
             var customers = await _orderSevice.GetAllCustomersAsync();
 
-            var result = customers.GroupBy(e => (e.Orders, e.name),
+            var result = customers.GroupBy(e => (e.Orders, e.Name),
                 (key, value) => new
                 {
-                    Customer = key.name,
-                    Total = value.Sum(e => e.Orders.Sum(e => e.LineItems.Sum(e => e.Product.price * e.quantity)))
+                    Customer = key.Name,
+                    Total = value.Sum(e => e.Orders.Sum(e => e.LineItems.Sum(e => e.Product.Price * e.Quantity)))
 
                 }).OrderByDescending(e => e.Total).Where(e => e.Total > totalOrdersPrice);
 
