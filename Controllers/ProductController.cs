@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace EcomApp.Controllers
 {
+    /// <summary>
+    /// Класс для работы с продуктами
+    /// </summary>
     public class ProductController : ControllerBase
     {
         private readonly IProductService _productService;
@@ -16,22 +19,28 @@ namespace EcomApp.Controllers
             _productService = productService;
         }
 
+        /// <summary>
+        /// Создание продукта по модели <see cref="EcomApp.Contracts.Request.ProductCreateRequest"/>  из web-запроса  
+        /// </summary>
         [HttpPost(ApiRoutes.Producs.Create)]
         public async Task<IActionResult> Create(ProductCreateRequest productRequest)
         {
+            if (productRequest == null)
+                return NoContent();
 
             Product product = new Product
             {
                 Price = productRequest.Price,
                 ProductName = productRequest.Name
-
             };
 
             await _productService.CreateProductAsync(product);
             return Ok("Продукт создан");
 
         }
-
+        /// <summary>
+        /// Удаление продукта по id
+        /// </summary>
         [HttpDelete(ApiRoutes.Producs.Delete)]
         public async Task<IActionResult> Delete(int id)
         {
@@ -41,7 +50,9 @@ namespace EcomApp.Controllers
 
             return Ok("Продукт удален");
         }
-
+        /// <summary>
+        /// Получение продукта по id
+        /// </summary>
         [HttpGet(ApiRoutes.Producs.GetOne)]
         public async Task<IActionResult> GetProductById(int id)
         {
@@ -51,17 +62,24 @@ namespace EcomApp.Controllers
 
             return Ok(product);
         }
-
+        /// <summary>
+        /// Получение списка всех продуктов
+        /// </summary>
         [HttpGet(ApiRoutes.Producs.GetAll)]
         public async Task<IActionResult> GetAllProducts()
         {
             var products = await _productService.GetAllProductsAsync();
             return Ok(products);
         }
-
+        /// <summary>
+        /// Изменение информации о продукте по модели <see cref="EcomApp.Contracts.Request.ProductUpdateRequest"/>  из web-запроса  
+        /// </summary>
         [HttpPut(ApiRoutes.Producs.Update)]
         public async Task<IActionResult> ChangeProduct(ProductUpdateRequest productNewInfo)
         {
+            if (productNewInfo == null)
+                return NoContent();
+
             var product = await _productService.GetProductByIdAsync(productNewInfo.ID);
             if (product != null)
             {

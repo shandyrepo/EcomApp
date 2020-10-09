@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 namespace EcomApp.Services
 {
     /// <summary>
-    /// Сервис для работы создания заказов, пользователей и получения различной информации о заказах, покупателях, товарах
+    /// Сервис для работы создания заказов, пользователей и получения различной информации о заказах, покупателях, товарах из БД
     /// </summary>
     public class OrderService : IOrderService
     {
@@ -29,7 +29,6 @@ namespace EcomApp.Services
                 return _dataContext.Database.BeginTransaction();
             }
         }
-
         /// <summary>
         /// Создание пользователя
         /// </summary>

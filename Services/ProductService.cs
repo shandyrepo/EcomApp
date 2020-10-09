@@ -39,7 +39,7 @@ namespace EcomApp.Services
             return created > 0;
         }
         /// <summary>
-        /// Удаление продукта из БЖ
+        /// Удаление продукта из БД
         /// </summary>
         public async Task<bool> DeleteProductAscync(int id)
         {

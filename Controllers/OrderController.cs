@@ -24,11 +24,14 @@ namespace EcomApp.Controllers
         }
 
         /// <summary>
-        /// Попытка создания пользователя (если отсутствует в базе) и создание для него заказа
+        /// Попытка создания пользователя (если отсутствует в базе) и создание для него заказа по модели <see cref="EcomApp.Contracts.Request.CustomerOrderRequest"/>  из web-запроса  
         /// </summary>
         [HttpPost(ApiRoutes.Orders.Create)]
         public async Task<IActionResult> CreateOrder(CustomerOrderRequest customerWithOrder)
         {
+            if (customerWithOrder == null)
+                return NoContent();
+
             Customer customer = new Customer { Name = customerWithOrder.Name, Email = customerWithOrder.Email };
 
             await _orderSevice.CreateCustomerAsync(customer);
