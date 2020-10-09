@@ -3,6 +3,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace EcomApp.Models
 {
+    /// <summary>
+    /// Информация о продукте
+    /// </summary>
     public class Product
     {
         [Key]

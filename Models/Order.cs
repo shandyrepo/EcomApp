@@ -4,6 +4,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace EcomApp.Models
 {
+    /// <summary>
+    /// Информация о заказе
+    /// </summary>
     public class Order
     {
         [Key]

@@ -6,6 +6,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace EcomApp.Contracts.Request
 {
+    /// <summary>
+    /// Детали заказа для <see cref="EcomApp.Contracts.Request.CustomerOrderRequest"/> 
+    /// </summary>
     public class OrderItemsRequest
     {
         public int Id { get; set; }

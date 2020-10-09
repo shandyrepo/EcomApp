@@ -33,7 +33,7 @@ namespace EcomApp.Controllers
         }
 
         [HttpDelete(ApiRoutes.Producs.Delete)]
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(int id)
         {
             var deleted = await _productService.DeleteProductAscync(id);
             if (!deleted)
@@ -43,12 +43,12 @@ namespace EcomApp.Controllers
         }
 
         [HttpGet(ApiRoutes.Producs.GetOne)]
-        public async Task<IActionResult> GetProductById(int? id)
+        public async Task<IActionResult> GetProductById(int id)
         {
-            if (id == null || id <= 0)
-                return NoContent();
-
             var product = await _productService.GetProductByIdAsync(id);
+            if (product == null)
+                return NotFound($"Не найден продукт с id {id}");
+
             return Ok(product);
         }
 

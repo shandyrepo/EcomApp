@@ -5,6 +5,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace EcomApp.Contracts.Request
 {
+    /// <summary>
+    /// Информация о заказе полученная из web-запроса <see cref="EcomApp.Contracts.Request.CustomerOrderRequest"/>
+    /// </summary>
     public class CustomerOrderRequest
     {
         [EmailAddress]

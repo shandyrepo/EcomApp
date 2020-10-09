@@ -3,6 +3,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace EcomApp.Contracts.Request
 {
+    /// <summary>
+    /// Информация для создания продукта через web-запрос
+    /// </summary>
     public class ProductCreateRequest
     {
         public string Name { get; set; }

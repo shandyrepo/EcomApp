@@ -3,6 +3,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace EcomApp.Models
 {
+    /// <summary>
+    /// Позиция заказа
+    /// </summary>
     public class LineItem
     {
         [Key]

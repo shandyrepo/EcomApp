@@ -3,6 +3,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EcomApp.Data
 {
+    /// <summary>
+    /// Контекст данных для работы с БД
+    /// </summary>
     public class DataContext : DbContext
     {
         public static bool iscreated = false;

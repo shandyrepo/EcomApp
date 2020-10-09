@@ -11,6 +11,9 @@ using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
 namespace EcomApp.Controllers
 {
+    /// <summary>
+    /// Класс для работы с заказами покупателя и получения различной информации о заказах пользователя, популярных товарах и пр.
+    /// </summary>
     [ApiController]
     public class OrderController : ControllerBase
     {
@@ -20,6 +23,9 @@ namespace EcomApp.Controllers
             _orderSevice = orderService;
         }
 
+        /// <summary>
+        /// Попытка создания пользователя (если отсутствует в базе) и создание для него заказа
+        /// </summary>
         [HttpPost(ApiRoutes.Orders.Create)]
         public async Task<IActionResult> CreateOrder(CustomerOrderRequest customerWithOrder)
         {
@@ -34,7 +40,7 @@ namespace EcomApp.Controllers
                     Order newOrder = new Order();
                     foreach (var orderDetail in customerWithOrder.Items)
                     {
-                        LineItem doubleItem = newOrder.LineItems.FirstOrDefault(e => e.ProductId == orderDetail.Id);
+                        LineItem doubleItem = newOrder.LineItems.FirstOrDefault(item => item.ProductId == orderDetail.Id);
                         if (doubleItem == null)
                         {
                             newOrder.LineItems.Add(new LineItem()
@@ -48,10 +54,11 @@ namespace EcomApp.Controllers
                             doubleItem.Quantity += orderDetail.Quantity;
                         }
                     }
-                    var created = await _orderSevice.CreateOrderAsync(customerWithOrder.Email, newOrder);
+                    bool created = await _orderSevice.CreateOrderAsync(customerWithOrder.Email, newOrder);
 
                     if (created)
                         transaction.Commit();
+                    return Ok("Заказ оформлен");
                 }
                 catch (Exception ex)
                 {
@@ -59,20 +66,23 @@ namespace EcomApp.Controllers
                     return NotFound(ex.InnerException.Message);
                 }
             }
-            return Ok("Заказ оформлен");
+
         }
 
+        /// <summary>
+        /// Получение информации о заказах пользователя по его email-адрессу
+        /// </summary>
         [HttpGet(ApiRoutes.Orders.GetCustomerOrders)]
         public ActionResult<IEnumerable> GetCustomerOrdersByEmail(string email)
         {
             var customer = _orderSevice.GetCustomerOrders(email).Result;
-            if (customer != null && customer.Orders?.Count > 0)
+            if (customer != null && customer.Orders.Any())
             {
-                var res = customer.Orders.GroupBy(e => (e.LineItems, e.Id),
+                var res = customer.Orders.GroupBy(order => (order.LineItems, order.Id),
                     (key, value) => new
                     {
                         OrderID = key.Id,
-                        TotalOrderPrice = value.Sum(e => e.LineItems.Sum(p => p.Product.Price * p.Quantity))
+                        TotalOrderPrice = value.Sum(order => order.LineItems.Sum(item => item.Product.Price * item.Quantity))
 
                     }).OrderByDescending(e => e.TotalOrderPrice);
 
@@ -81,10 +91,13 @@ namespace EcomApp.Controllers
             return NotFound("Заказы отсутствуют");
         }
 
+        /// <summary>
+        /// Список проданных продуктов и их количество по уникальным заказам
+        /// </summary>
         [HttpGet(ApiRoutes.Orders.GetPopularProducts)]
         public async Task<ActionResult<Product>> GetPopularProducts()
         {
-            var itemsBySoldPositions = await _orderSevice.GetPopularProductsByUniqueOrders();
+            var itemsBySoldPositions = await _orderSevice.GetAllLineItems();
 
             var result = itemsBySoldPositions.GroupBy(product => (product.ProductId, product.Product.ProductName),
             (key, value) => new
@@ -94,29 +107,33 @@ namespace EcomApp.Controllers
 
             }).OrderByDescending(e => e.TotalSold);
 
-            if (result.ToList().Count > 0)
+            if (result.Any())
                 return Ok(result);
-            else
-                return NotFound("Отсутсвуют продукты");
+
+            return NotFound("Отсутсвуют продукты");
         }
 
+        /// <summary>
+        /// Получение списка покупателей с общей стоимостью заказа превышающую заданное значение
+        /// </summary>
         [HttpGet(ApiRoutes.Orders.GetCustomersOverTotalPrice)]
         public async Task<ActionResult<IEnumerable>> GetCustomersWithTotalOrderPricesAboveValue(decimal totalOrdersPrice)
         {
             var customers = await _orderSevice.GetAllCustomersAsync();
 
-            var result = customers.GroupBy(e => (e.Orders, e.Name),
+            var resultCustomers = customers.GroupBy(customer => (customer.Email, customer.Name),
                 (key, value) => new
                 {
                     Customer = key.Name,
-                    Total = value.Sum(e => e.Orders.Sum(e => e.LineItems.Sum(e => e.Product.Price * e.Quantity)))
+                    Email = key.Email,
+                    Total = value.Sum(customer => customer.Orders.Sum(order => order.LineItems.Sum(orderItem => orderItem.Product.Price * orderItem.Quantity)))
 
-                }).OrderByDescending(e => e.Total).Where(e => e.Total > totalOrdersPrice).ToList();
+                }).OrderByDescending(result => result.Total).Where(result => result.Total > totalOrdersPrice);
 
-            if (result.Count > 0)
-                return Ok(result);
-            else
-                return NotFound($"Отсутсвуют клиенты с закупкой выше {totalOrdersPrice}");
+            if (resultCustomers.Any())
+                return Ok(resultCustomers);
+
+            return NotFound($"Отсутсвуют клиенты с закупкой выше {totalOrdersPrice}");
         }
     }
 }

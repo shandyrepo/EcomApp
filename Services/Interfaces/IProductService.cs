@@ -8,9 +8,9 @@ namespace EcomApp.Services.Interfaces
     {
         Task<bool> CreateProductAsync(Product product);
 
-        Task<Product> GetProductByIdAsync(int? id);
+        Task<Product> GetProductByIdAsync(int id);
         Task<List<Product>> GetAllProductsAsync();
-        Task<bool> DeleteProductAscync(int? id);
+        Task<bool> DeleteProductAscync(int id);
         Task<bool> UpdateProductAsync(Product product);
 
 
