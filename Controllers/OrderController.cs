@@ -63,7 +63,7 @@ namespace EcomApp.Controllers
         }
 
         [HttpGet(ApiRoutes.Orders.GetCustomerOrders)]
-        public async Task<ActionResult<IEnumerable>> GetCustomerOrdersByEmail(string email)
+        public ActionResult<IEnumerable> GetCustomerOrdersByEmail(string email)
         {
             var customer = _orderSevice.GetCustomerOrders(email).Result;
             if (customer != null && customer.Orders?.Count > 0)
@@ -91,6 +91,7 @@ namespace EcomApp.Controllers
             {
                 ProductName = key.ProductName,
                 TotalSold = value.Sum(item => item.Quantity)
+
             }).OrderByDescending(e => e.TotalSold);
 
             if (result.ToList().Count > 0)

@@ -11,7 +11,8 @@ namespace EcomApp.Data
         {
             if (!iscreated)
             {
-                Database.EnsureDeleted();
+
+               // Database.EnsureDeleted();
                 Database.EnsureCreated();
                 iscreated = true;
             }

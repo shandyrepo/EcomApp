@@ -46,7 +46,6 @@ namespace EcomApp.Services
             {
                 var customer = _dataContext.Customers.FirstOrDefault(e => e.Email == email);
                 customer.Orders.Add(order);
-                //_dataContext.Orders.Add(order);
                 var created = await _dataContext.SaveChangesAsync();
                 return created > 0;
             }
@@ -64,7 +63,6 @@ namespace EcomApp.Services
         public async Task<Customer> GetCustomerOrders(string email)
         {
             return await GetCustomers().FirstOrDefaultAsync(p => p.Email == email);
-
         }
         private IQueryable<Customer> GetCustomers()
         {
