@@ -15,7 +15,7 @@
 
         public static class Orders
         {
-            public const string Create = Root + "/orders";
+            public const string Create = Root + "/orders/createorder";
             public const string GetPopularProducts = Root + "/orders/popular";
             public const string GetCustomerOrders = Root + "/orders/ordersbycustomer";
             public const string GetCustomersOverTotalPrice = Root + "/orders/preciouscustomers";
