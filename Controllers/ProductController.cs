@@ -28,7 +28,7 @@ namespace EcomApp.Controllers
             };
 
             await _productService.CreateProductAsync(product);
-            return Ok();
+            return Ok("Продукт создан");
 
         }
 
@@ -39,7 +39,7 @@ namespace EcomApp.Controllers
             if (!deleted)
                 return NoContent();
 
-            return Ok();
+            return Ok("Продукт удален");
         }
 
         [HttpGet(ApiRoutes.Producs.GetOne)]
@@ -71,7 +71,7 @@ namespace EcomApp.Controllers
 
                 return Ok(updated.Result ? "Успешно обновлено" : "Не удалось изменить продукт");
             }
-            return NotFound();
+            return NotFound($"Продукт с id {productNewInfo.ID} не найден");
         }
     }
 }

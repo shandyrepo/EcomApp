@@ -59,7 +59,7 @@ namespace EcomApp.Controllers
                     return NotFound(ex.InnerException.Message);
                 }
             }
-            return Ok();
+            return Ok("Заказ оформлен");
         }
 
         [HttpGet(ApiRoutes.Orders.GetCustomerOrders)]
@@ -111,9 +111,9 @@ namespace EcomApp.Controllers
                     Customer = key.Name,
                     Total = value.Sum(e => e.Orders.Sum(e => e.LineItems.Sum(e => e.Product.Price * e.Quantity)))
 
-                }).OrderByDescending(e => e.Total).Where(e => e.Total > totalOrdersPrice);
+                }).OrderByDescending(e => e.Total).Where(e => e.Total > totalOrdersPrice).ToList();
 
-            if (result.ToList().Count > 0)
+            if (result.Count > 0)
                 return Ok(result);
             else
                 return NotFound($"Отсутсвуют клиенты с закупкой выше {totalOrdersPrice}");
