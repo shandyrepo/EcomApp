@@ -9,7 +9,7 @@ namespace EcomApp.Services.Interfaces
         Task<bool> CreateProductAsync(Product product);
 
         Task<Product> GetProductByIdAsync(int id);
-        Task<List<Product>> GetAllProductsAsync();
+        Task<IEnumerable<Product>> GetAllProductsAsync();
         Task<bool> DeleteProductAscync(int id);
         Task<bool> UpdateProductAsync(Product product);
 
