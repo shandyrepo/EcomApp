@@ -8,7 +8,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
+using System.ComponentModel.DataAnnotations;
 namespace EcomApp.Controllers
 {
     [ApiController]
@@ -21,9 +21,9 @@ namespace EcomApp.Controllers
         }
 
         [HttpPost(ApiRoutes.Orders.Create)]
-        public async Task<IActionResult> CreateOrder(string customerName, string customerEmail, [FromBody] List<OrderCreateRequest> orderDetaild)
+        public async Task<IActionResult> CreateOrder(CustomerOrderRequest customerWithOrder)
         {
-            Customer customer = new Customer { Name = customerName, Email = customerEmail };
+            Customer customer = new Customer { Name = customerWithOrder.Name, Email = customerWithOrder.Email };
 
             await _orderSevice.CreateCustomerAsync(customer);
 
@@ -32,7 +32,7 @@ namespace EcomApp.Controllers
                 try
                 {
                     Order newOrder = new Order();
-                    foreach (var orderDetail in orderDetaild)
+                    foreach (var orderDetail in customerWithOrder.Items)
                     {
                         LineItem doubleItem = newOrder.LineItems.FirstOrDefault(e => e.ProductId == orderDetail.Id);
                         if (doubleItem == null)
@@ -48,7 +48,7 @@ namespace EcomApp.Controllers
                             doubleItem.Quantity += orderDetail.Quantity;
                         }
                     }
-                    var created = await _orderSevice.CreateOrderAsync(customerEmail, newOrder);
+                    var created = await _orderSevice.CreateOrderAsync(customerWithOrder.Email, newOrder);
 
                     if (created)
                         transaction.Commit();
